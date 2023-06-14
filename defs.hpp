@@ -6,16 +6,16 @@ using namespace std;
 #ifndef DEFS_HPP
 #define DEFS_HPP
 
+typedef unsigned long long int64;
+
 typedef struct State {
-    char** s;
+    int64* s;
     unsigned int row_size;
 
     ostream& operator<<(ostream& os) {
         for (int i = 0; i < 5; ++i) {
             os << "x" << i << ": ";
-            for(int j = 0; j < 8; ++j) {
-                os << (char) this->s[i][j];
-            }
+            os << (char) this->s[i];
             os << endl;
         }
         return os;

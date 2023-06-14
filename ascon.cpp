@@ -10,36 +10,36 @@ Ascon::Ascon(char* key, char* iv, char* nonce) {
 
     State* state = new State;
 
-    state->s = new char*[5];
-    for(int i = 0; i < 5; i++) {
-        state->s[i] = new char[8];
-    }
+    state->s = new int64[5];
     
-    strcpy(state->s[0], iv);
-    strcpy(state->s[1], key);
-    strcpy(state->s[2], key + 8);
-    strcpy(state->s[3], nonce);
-    strcpy(state->s[4], nonce + 8);
+    cout << "Addr s: " << state->s << endl;
+    cout << "Addr s++: " << state->s++ << endl;
+    cout << "Addr s[0]: " << &state->s[0] << endl;
+    cout << "Addr s[1]: " << &state->s[1] << endl;
+    cout << "Addr s[1]: " << &state->s[2] << endl;
+    
+    // NOTE: Why pointer arithmetic is not working?
+    // e.g: memcpy(&state->s + 8, iv, 8); gives this->state->s[1] = 0x0
+    // God I hate pointers
+    memcpy(&state->s[0], iv, 8);
+    memcpy(&state->s[1], key, 8);
+    memcpy(&state->s[2], key + 8, 8);
+    memcpy(&state->s[3], nonce, 8);
+    memcpy(&state->s[4], nonce + 8, 8);
 
     this->state = state;
 }
 
 Ascon::~Ascon() {
-    for (int i = 0; i < 8; ++i){
-        delete[] this->state->s[i];
-    }
     delete[] this->state->s;
     delete this->state;
 }
 
 void Ascon::print_state() {
     for (int i = 0; i < 5; ++i) {
-        cout << "x" << i << ": ";
-        for(int j = 0; j < 8; ++j) {
-            cout << (char) this->state->s[i][j];
-        }
-        cout << endl;
+        cout << "x" << i << ": " << hex << this->state->s[i] << endl;
     }
+    cout << endl;
     //cout << *this->state << endl;
 }
 
@@ -56,7 +56,6 @@ void Ascon::plaintext() {
     AsconPermutation* permutation = new AsconPermutation(this->state);
     permutation->permutate(12);
     this->print_state();
-    // TODO
 }
 
 void Ascon::cypher() {
