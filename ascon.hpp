@@ -8,13 +8,14 @@ using namespace std;
 
 class Ascon {
     private:
-        char* key;
+        int64* key;
         State* state;
+        int64* message;
+        char* tag;
         unsigned int qty_blocks;
         void initialization();
         void associated_data();
         void plaintext();
-        void cypher();
         void finalization();
         void print_state();
    public:
@@ -22,6 +23,7 @@ class Ascon {
         ~Ascon(); 
         char* encrypt(char* message);
         char* decrypt(char* message);
+        char* get_tag();
 };
 
 #endif

@@ -8,7 +8,7 @@ using namespace std;
 
 typedef unsigned long long int64;
 
-typedef struct State {
+struct State {
     int64* s;
     unsigned int row_size;
 
